@@ -29,16 +29,31 @@ def make_obj(row: str) -> (str, str):
 
 def main():
     # dump messages and some additional stats into csv files
-    with open('raw files/tsohar.txt', 'r', encoding='utf-8') as file:
+    with open('raw files/chat.txt', 'r', encoding='utf-8') as file:
         data = file.read().splitlines()
-    f = csv.writer(open('data files/tsohar.csv', 'w', encoding='utf-8'))
+    f = csv.writer(open('data files/chat.csv', 'w', encoding='utf-8'))
     f.writerow(['author', 'date', 'text'])
-    g = csv.writer(open('data files/tsohar_stats.csv', 'w', encoding='utf-8'))
+    g = csv.writer(open('data files/global_stats.csv', 'w', encoding='utf-8'))
     # g.writerow(['name', 'number of messages', 'most common word', 'number of appearances'])
     g.writerow(['name', 'number of messages'])
+    h = csv.writer(open('data files/dates.csv', 'w', encoding='utf-8'))
+    h.writerow(['date', 'amount'])
+    dates = {}
     # check for AM/PM. if they aren't present in a line, it's discarded as
     # not being a message(usually being new line mistakes in the raw file)
     r = re.compile('.*[AP]M*')
+    # stats dict structure:
+    # stats = {
+    #   'user1': {
+    #       'num': [number of overall messages]
+    #       'messages': [
+    #           {
+    #               'date': m/d/yy, HH:MM (AM or PM)
+    #               'text': [message content]
+    #           }, ...
+    #       ]
+    #   }, ...
+    # }
     stats = {}
     # sort all messages and their dates according to sender
     print("parsing raw file")
@@ -64,6 +79,10 @@ def main():
                 'text': row[author+1:]
             })
         f.writerow([name, row[:time+6], row[author+1:]])
+        if row[:time-3] not in dates.keys():
+            dates[row[:time-3]] = 1
+        else:
+            dates[row[:time-3]] += 1
 
     print("pulling global stats")
     # find number of messages from each member and sort by number,
@@ -89,6 +108,8 @@ def main():
                for i in range(2)])"""
     print("finished parsing users")
     # date parsing should be added here
+    for date in dates:
+        h.writerow([date, dates[date]])
     print(f"number of overall messages: {sum([stats[item]['num'] for item in stats])}")
     datadump(stats, 'data files/stats.json')
     # datadump(counted_messages, 'counted_messages.json')

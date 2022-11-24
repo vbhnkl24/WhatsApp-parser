@@ -12,7 +12,7 @@ def datadump(data, file):
 
 # finding the first two colons in the message, which are used to indicate
 # the date of the message and the message author's name
-def make_obj(row: str) -> (str, str):
+def make_obj(row: str) -> (int, int):
     author_colon = 0
     author = False
     for let in range(len(row)):
