@@ -28,11 +28,11 @@ def make_obj(row: str) -> (str, str):
 
 def main():
     # dump messages and some additional stats into csv files
-    with open('nati_provided.txt', 'r', encoding='utf-8') as file:
+    with open('raw files/nati_provided.txt', 'r', encoding='utf-8') as file:
         data = file.read().splitlines()
-    f = csv.writer(open('extended_chat.csv', 'w', encoding='utf-8'))
+    f = csv.writer(open('data files/extended_chat.csv', 'w', encoding='utf-8'))
     f.writerow(['author', 'date', 'text'])
-    g = csv.writer(open('extended_stats.json', 'w', encoding='utf-8'))
+    g = csv.writer(open('data files/extended_stats.json', 'w', encoding='utf-8'))
     # g.writerow(['name', 'number of messages', 'most common word', 'number of appearances'])
     g.writerow(['name', 'number of messages'])
     # check for AM/PM. if they aren't present in a line, it's discarded as
@@ -94,7 +94,7 @@ def main():
                for i in range(2)])"""
     print("finished parsing users")
     print(f"number of overall messages: {sum([item['num'] for item in stats])}")
-    datadump(stats, 'extended_stats.json')
+    datadump(stats, 'data files/extended_stats.json')
     # datadump(counted_messages, 'extended_count.json')
     for user in user_num:
         # g.writerow([user, user_num[user],

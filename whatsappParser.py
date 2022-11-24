@@ -29,11 +29,11 @@ def make_obj(row: str) -> (str, str):
 
 def main():
     # dump messages and some additional stats into csv files
-    with open('tsohar.txt', 'r', encoding='utf-8') as file:
+    with open('raw files/tsohar.txt', 'r', encoding='utf-8') as file:
         data = file.read().splitlines()
-    f = csv.writer(open('tsohar.csv', 'w', encoding='utf-8'))
+    f = csv.writer(open('data files/tsohar.csv', 'w', encoding='utf-8'))
     f.writerow(['author', 'date', 'text'])
-    g = csv.writer(open('tsohar_stats.csv', 'w', encoding='utf-8'))
+    g = csv.writer(open('data files/tsohar_stats.csv', 'w', encoding='utf-8'))
     # g.writerow(['name', 'number of messages', 'most common word', 'number of appearances'])
     g.writerow(['name', 'number of messages'])
     # check for AM/PM. if they aren't present in a line, it's discarded as
@@ -90,7 +90,7 @@ def main():
     print("finished parsing users")
     # date parsing should be added here
     print(f"number of overall messages: {sum([stats[item]['num'] for item in stats])}")
-    datadump(stats, 'stats.json')
+    datadump(stats, 'data files/stats.json')
     # datadump(counted_messages, 'counted_messages.json')
     for user in user_num:
         # g.writerow([user, user_num[user],
