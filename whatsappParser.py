@@ -88,6 +88,7 @@ def main():
                f" {list(counted_messages[user].values())[i]}"
                for i in range(2)])"""
     print("finished parsing users")
+    # date parsing should be added here
     print(f"number of overall messages: {sum([stats[item]['num'] for item in stats])}")
     datadump(stats, 'stats.json')
     # datadump(counted_messages, 'counted_messages.json')
