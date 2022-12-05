@@ -14,17 +14,20 @@ def datadump(data, file):
 # finding the first two colons in the message, which are used to indicate
 # the date of the message and the message author's name
 def make_obj(row: str) -> (str, str):
-    time_colon = 0
-    time = False
+    time_colon, date_comma = 0, 0
+    time, date = False, False
     for let in range(len(row)):
         temp = row[let]
+        if temp == ',' and not date:
+            date_comma = let
+            date = True
         if temp == ':':
             if time:
-                return time_colon, let
+                return time_colon, let, date_comma
             else:
                 time_colon = let
                 time = True
-    return None, None
+    return None, None, None
 
 
 def main():
@@ -33,7 +36,7 @@ def main():
         data = file.read().splitlines()
     f = csv.writer(open('data files/chat.csv', 'w', encoding='utf-8'))
     f.writerow(['author', 'date', 'text'])
-    g = csv.writer(open('data files/global_stats.csv', 'w', encoding='utf-8'))
+    g = csv.writer(open('data files/stats.csv', 'w', encoding='utf-8'))
     # g.writerow(['name', 'number of messages', 'most common word', 'number of appearances'])
     g.writerow(['name', 'number of messages'])
     h = csv.writer(open('data files/dates.csv', 'w', encoding='utf-8'))
@@ -60,7 +63,7 @@ def main():
     for row in data:
         if r.match(row) is None:
             continue
-        time, author = make_obj(row)
+        time, author, date = make_obj(row)
         if (time is None) or (author is None):
             continue
         name = row[time+9:author]
@@ -79,10 +82,10 @@ def main():
                 'text': row[author+1:]
             })
         f.writerow([name, row[:time+6], row[author+1:]])
-        if row[:time-3] not in dates.keys():
-            dates[row[:time-3]] = 1
+        if row[:date] not in dates.keys():
+            dates[row[:date]] = 1
         else:
-            dates[row[:time-3]] += 1
+            dates[row[:date]] += 1
 
     print("pulling global stats")
     # find number of messages from each member and sort by number,
